@@ -1,0 +1,44 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build release zip
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Prepare release archive
+        run: |
+          set -euo pipefail
+          version="${GITHUB_REF_NAME:-manual}"
+          archive="moeflux-codex-installer-${version}.zip"
+          mkdir -p dist
+          zip -9 "dist/${archive}" \
+            install-windows-en.ps1 \
+            install-windows-zh.ps1 \
+            install-windows-ja.ps1 \
+            install-windows-ko.ps1 \
+            install-macos-en.sh \
+            install-macos-zh.sh \
+            install-macos-ja.sh \
+            install-macos-ko.sh \
+            README.md
+          echo "archive=${archive}" >> "$GITHUB_OUTPUT"
+        id: archive
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/${{ steps.archive.outputs.archive }}
+          generate_release_notes: true
