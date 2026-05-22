@@ -171,7 +171,7 @@ network_access = true
             $Auth = [ordered]@{}
         }
     }
-    $Auth["auth_mode"] = "api-key"
+    $Auth["auth_mode"] = "apikey"
     $Auth["OPENAI_API_KEY"] = $ApiKey
     $Auth | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath $AuthFile -Encoding UTF8
 

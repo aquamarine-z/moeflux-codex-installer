@@ -170,7 +170,7 @@ if path.exists():
     except json.JSONDecodeError:
         data = {}
 
-data["auth_mode"] = "api-key"
+data["auth_mode"] = "apikey"
 data["OPENAI_API_KEY"] = key
 path.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 PY
